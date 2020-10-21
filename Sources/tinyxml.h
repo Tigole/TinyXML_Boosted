@@ -1082,19 +1082,13 @@ public:
 
 	/** Tigole add */
 	template<typename T>
-	void SetAttribute(const char* name, const T& value)
+	void SetAttribute(const std::string& name, const T& value)
 	{
 	    std::stringstream l_ss;
 
 	    l_ss << value;
 
-	    SetAttribute(name, l_ss.str());
-	}
-
-	template<typename T>
-	void SetAttribute(const std::string& name, const T& value)
-	{
-	    SetAttribute(name.c_str(), value);
+	    SetAttribute(name.c_str(), l_ss.str());
 	}
 	#endif
 
