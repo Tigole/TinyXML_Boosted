@@ -1079,6 +1079,23 @@ public:
 	void SetAttribute( const std::string& name, int _value );
 	///< STL std::string form.
 	void SetDoubleAttribute( const std::string& name, double value );
+
+	/** Tigole add */
+	template<typename T>
+	void SetAttribute(const char* name, const T& value)
+	{
+	    std::stringstream l_ss;
+
+	    l_ss << value;
+
+	    SetAttribute(name, l_ss.str());
+	}
+
+	template<typename T>
+	void SetAttribute(const std::string& name, const T& value)
+	{
+	    SetAttribute(name.c_str(), value);
+	}
 	#endif
 
 	/** Sets an attribute of name to a given value. The attribute
