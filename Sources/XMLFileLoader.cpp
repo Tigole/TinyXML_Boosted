@@ -131,6 +131,10 @@ bool XMLFileLoader::mt_Set_File(const std::string& file_path)
 			}
 		}
 	}
+	else
+    {
+        std::cerr << l_document.ErrorDesc() << '\n';
+    }
 
 	return l_b_ret;
 }
