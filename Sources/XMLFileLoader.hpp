@@ -49,6 +49,12 @@ public:
 	}
 	bool mt_Get_Value(std::string& element_value) const;
 
+	template<typename T>
+	bool mt_Load_Custom_Type(std::function<bool(const TiXmlElement&, T&)> load, T& object) const
+	{
+	    return load(*m_target, object);
+	}
+
 	XML_Element mt_Get_Child(const std::string& child_name) const;
 
 	const char* mt_Get_Text(void) const;
