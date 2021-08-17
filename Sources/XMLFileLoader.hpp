@@ -83,7 +83,7 @@ public:
 
 	bool mt_Set_File(const std::string& file_path);
 	template<class C>
-	bool mt_Add_On_Entry_Callback(const std::string xml_path, bool(C::*callback)(const XML_Element&), C* object)
+	bool mt_Add_On_Entry_Callback(const std::string& xml_path, bool(C::*callback)(const XML_Element&), C* object)
 	{
 		bool l_b_ret;
 		if (m_current_file_it != m_files.end())
@@ -97,7 +97,7 @@ public:
 		return l_b_ret;
 	}
 	template<class C>
-	bool mt_Add_On_Entry_Callback(const std::string& file_path, const std::string xml_path, bool(C::*callback)(const XML_Element&), C* object)
+	bool mt_Add_On_Entry_Callback(const std::string& file_path, const std::string& xml_path, bool(C::*callback)(const XML_Element&), C* object)
 	{
 		bool l_b_ret;
 		XML_FileHandler::iterator l_file_it;
@@ -113,7 +113,7 @@ public:
 		return l_b_ret;
 	}
 	template<class C>
-	bool mt_Add_On_Exit_Callback(const std::string xml_path, bool(C::*callback)(const XML_Element&), C* object)
+	bool mt_Add_On_Exit_Callback(const std::string& xml_path, bool(C::*callback)(const XML_Element&), C* object)
 	{
 		bool l_b_ret;
 		if (m_current_file_it != m_files.end())
@@ -127,7 +127,7 @@ public:
 		return l_b_ret;
 	}
 	template<class C>
-	bool mt_Add_On_Exit_Callback(const std::string& file_path, const std::string xml_path, bool(C::*callback)(const XML_Element&), C* object)
+	bool mt_Add_On_Exit_Callback(const std::string& file_path, const std::string& xml_path, bool(C::*callback)(const XML_Element&), C* object)
 	{
 		XML_FileHandler::iterator l_file_it;
 		bool l_b_ret;

@@ -27,37 +27,6 @@ bool XML_Element::mt_Get_Attribute(const std::string& attribute_name, float& att
 
 bool XML_Element::mt_Get_Attribute(const std::string& attribute_name, bool& attribute_value) const
 {
-	std::string l_attribute_value;
-	bool l_b_ret;
-	std::unordered_map<std::string, bool> l_map;
-	std::unordered_map<std::string, bool>::const_iterator l_it;
-
-	l_map.emplace(std::make_pair("true", true));
-	l_map.emplace(std::make_pair("false", false));
-	l_map.emplace(std::make_pair("TRUE", true));
-	l_map.emplace(std::make_pair("FALSE", false));
-	l_map.emplace(std::make_pair("yes", true));
-	l_map.emplace(std::make_pair("no", false));
-	l_map.emplace(std::make_pair("YES", true));
-	l_map.emplace(std::make_pair("NO", false));
-	l_map.emplace(std::make_pair("1", true));
-	l_map.emplace(std::make_pair("0", false));
-
-	l_b_ret = mt_Get_Attribute(attribute_name, l_attribute_value);
-	if (l_b_ret == true)
-	{
-		l_it = l_map.find(l_attribute_value);
-		if (l_it != l_map.end())
-		{
-			l_b_ret = true;
-			attribute_value = l_it->second;
-		}
-		else
-		{
-			l_b_ret = false;
-		}
-	}
-
 	return m_target->QueryBoolAttribute(attribute_name.c_str(), &attribute_value) == TIXML_SUCCESS;
 }
 
