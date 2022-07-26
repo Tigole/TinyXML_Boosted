@@ -70,7 +70,8 @@ XML_Element XML_Element::mt_Get_Child(const std::string& child_name) const
 XMLFileLoader::XMLFileLoader()
  :	m_files(),
 	m_current_file_it(m_files.end()),
-	m_loading_struct()
+	m_loading_struct(),
+	m_Progression_Callback()
 {}
 
 bool XMLFileLoader::mt_Set_File(const std::string& file_path)
@@ -183,29 +184,24 @@ bool XMLFileLoader::mt_Recursive_Exploration(const TiXmlElement* current_element
 	const TiXmlElement* l_previous_element(current_element);
 	std::string l_path;
 
-	l_path = mt_Get_Path(current_element);
-	l_b_ret = mt_Manage_Callback(*current_element, l_path, on_entry_callbacks);
-	if (l_b_ret == true)
-	{
-		current_element = current_element->FirstChildElement();
-		if (current_element != nullptr)
-		{
-			l_b_ret = mt_Recursive_Exploration(current_element, loading_struct, on_entry_callbacks, on_exit_callbacks);
-		}
+	l_b_ret = true;
+	for (const TiXmlElement* l_Element = current_element->FirstChildElement(); (l_Element != nullptr) && (l_b_ret == true); l_Element = l_Element->NextSiblingElement())
+    {
+        l_path = mt_Get_Path(l_Element);
+        l_b_ret = mt_Manage_Callback(*l_Element, l_path, on_entry_callbacks);
 
-		l_path = mt_Get_Path(l_previous_element);
-		l_b_ret = mt_Manage_Callback(*l_previous_element, l_path, on_exit_callbacks);
-		if (l_b_ret == true)
-		{
-			current_element = l_previous_element->NextSiblingElement();
-			if (current_element != nullptr)
-			{
-				l_b_ret = mt_Recursive_Exploration(current_element, loading_struct, on_entry_callbacks, on_exit_callbacks);
-			}
-		}
-	}
-	loading_struct.m_element_count++;
+        if (l_b_ret == true)
+        {
+            l_b_ret = mt_Recursive_Exploration(l_Element, loading_struct, on_entry_callbacks, on_exit_callbacks);
+        }
 
+        if (l_b_ret == true)
+        {
+            l_b_ret = mt_Manage_Callback(*l_Element, l_path, on_exit_callbacks);
+        }
+
+        loading_struct.m_element_count++;
+    }
 	for (std::size_t ii = 0; ii < m_Progression_Callback.size(); ii++)
     {
         m_Progression_Callback[ii](m_current_file_it->first,
@@ -213,7 +209,7 @@ bool XMLFileLoader::mt_Recursive_Exploration(const TiXmlElement* current_element
                                    static_cast<int>(m_current_file_it->second.m_element_count));
     }
 
-	return l_b_ret;
+    return l_b_ret;
 }
 
 bool XMLFileLoader::mt_Explore_Document(TiXmlElement& root, LoadingStructure& loading_struct, XML_CallbackContainer& on_entry_callbacks, XML_CallbackContainer& on_exit_callbacks)
