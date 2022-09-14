@@ -1,5 +1,6 @@
 #include "XMLFileLoader.hpp"
 #include <unordered_map>
+#include <vector>
 
 XML_Element::XML_Element(const TiXmlElement& target)
  :	m_target(&target)
