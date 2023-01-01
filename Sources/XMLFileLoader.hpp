@@ -174,7 +174,7 @@ public:
 		return l_b_ret;
 	}
 
-	void mt_Work(void);
+	bool mt_Work(void);
 
 	template<class C>
 	void mt_Add_Progression_Callback(void (C::*pmt_Callback)(const std::string&, int, int), C* obj)

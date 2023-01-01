@@ -130,7 +130,7 @@ bool XMLFileLoader::mt_Add_File(const std::string& file_path)
 	return l_b_ret;
 }
 
-void XMLFileLoader::mt_Work(void)
+bool XMLFileLoader::mt_Work(void)
 {
 	TiXmlDocument l_document;
 
@@ -138,9 +138,11 @@ void XMLFileLoader::mt_Work(void)
 	{
 		if (l_document.LoadFile(m_current_file_it->first))
 		{
-			mt_Explore_Document(*l_document.RootElement(), m_loading_struct, m_current_file_it->second.m_on_entry_callbacks, m_current_file_it->second.m_on_exit_callbacks);
+			return mt_Explore_Document(*l_document.RootElement(), m_loading_struct, m_current_file_it->second.m_on_entry_callbacks, m_current_file_it->second.m_on_exit_callbacks);
 		}
 	}
+
+	return false;
 }
 
 bool XMLFileLoader::mt_Manage_Callback(const TiXmlElement& element, const std::string& path, XML_CallbackContainer& callbacks)
