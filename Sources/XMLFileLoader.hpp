@@ -7,6 +7,7 @@
 #include <string>
 #include <functional>
 #include <stack>
+#include <vector>
 
 class XML_Element
 {
