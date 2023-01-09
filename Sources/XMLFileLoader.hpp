@@ -1,7 +1,7 @@
 #ifndef _XML_FILE_LOADER_HPP
 #define _XML_FILE_LOADER_HPP 1
 
-#include <tinyxml.h>
+#include "tinyxml.h"
 
 #include <map>
 #include <string>
