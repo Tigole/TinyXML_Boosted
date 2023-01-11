@@ -1,4 +1,5 @@
 #include "XMLFileLoader.hpp"
+#include "tinyxml.h"
 #include <unordered_map>
 #include <vector>
 
@@ -31,119 +32,77 @@ bool XML_Element::mt_Get_Attribute(const std::string& attribute_name, bool& attr
 	return m_target->QueryBoolAttribute(attribute_name.c_str(), &attribute_value) == TIXML_SUCCESS;
 }
 
-bool XML_Element::mt_Get_Value(std::string& element_value) const
+bool XML_Element::mt_Get_Text(std::string& element_value) const
 {
-	element_value = m_target->ValueStr();
+    element_value = "";
+    if (m_target->Value() != nullptr)
+    {
+        element_value = m_target->ValueStr();
+    }
 	return true;
 }
 
-const char* XML_Element::mt_Get_Text(void) const
-{
-    return m_target->GetText();
-}
-
-bool XML_Element::mt_Next(const std::string& element_name)
-{
-    const TiXmlElement* l_Next = m_target->NextSiblingElement(element_name);
-
-    if (l_Next != nullptr)
-    {
-        m_target = l_Next;
-    }
-
-    return (l_Next != nullptr);
-}
-
-
-XML_Element XML_Element::mt_Get_Child(const std::string& child_name) const
-{
-    const TiXmlElement* l_Tgt = m_target->FirstChildElement(child_name);
-
-    return XML_Element(*l_Tgt);
-}
 
 
 
 
 
-
-
-XMLFileLoader::XMLFileLoader()
- :	m_files(),
-	m_current_file_it(m_files.end()),
-	m_loading_struct(),
+XMLFileLoader::XMLFileLoader() :
+    m_File_Data(),
+    m_Loading_Struct(),
+    m_File_Path(),
 	m_Progression_Callback()
 {}
 
-bool XMLFileLoader::mt_Set_File(const std::string& file_path)
+bool XMLFileLoader::mt_Load(const std::string& file_path)
+{
+	TiXmlDocument l_document;
+
+	if (mt_Count_File_Elements() == false)
+    {
+        return false;
+    }
+
+    if (l_document.LoadFile(file_path))
+    {
+        return mt_Explore_Document(*l_document.RootElement(), m_Loading_Struct, m_File_Data.m_On_Entry_Callbacks, m_File_Data.m_On_Exit_Callbacks);
+    }
+    std::cerr << l_document.ErrorDesc() << '\n';
+
+	return false;
+}
+
+bool XMLFileLoader::mt_Count_File_Elements(void)
 {
 	LoadingStructure l_loading_struct;
 	TiXmlDocument l_document;
 	TiXmlElement* l_root;
 	XML_FileHandlerData l_xml_file_handler_data;
-	bool l_b_ret;
 
-	l_b_ret = l_document.LoadFile(file_path);
-	if (l_b_ret == true)
+	if (l_document.LoadFile(m_File_Path) == true)
 	{
 		l_root = l_document.RootElement();
-		l_b_ret = (l_root != nullptr);
-		if (l_b_ret == true)
+		if (l_root != nullptr)
 		{
-			m_current_file_it = m_files.find(file_path);
-			if (m_current_file_it == m_files.end())
-			{
-				l_b_ret = mt_Explore_Document(*l_root, l_loading_struct, l_xml_file_handler_data.m_on_entry_callbacks, l_xml_file_handler_data.m_on_exit_callbacks);
-				if (l_b_ret == true)
-				{
-					l_xml_file_handler_data.m_element_count = l_loading_struct.m_element_count;
-					m_current_file_it = m_files.emplace(file_path, l_xml_file_handler_data).first;
-				}
-			}
+            bool l_b_ret = mt_Explore_Document(*l_root, l_loading_struct, l_xml_file_handler_data.m_On_Entry_Callbacks, l_xml_file_handler_data.m_On_Exit_Callbacks);
+            if (l_b_ret == true)
+            {
+                m_File_Data.m_Element_Count = l_loading_struct.m_Element_Count;
+
+                return true;
+            }
 		}
+		else
+        {
+            std::cerr << "No root\n";
+        }
 	}
 	else
     {
         std::cerr << l_document.ErrorDesc() << '\n';
     }
 
-	return l_b_ret;
-}
-
-bool XMLFileLoader::mt_Add_File(const std::string& file_path)
-{
-	XML_FileHandler::iterator l_file_it;
-	bool l_b_ret;
-
-	l_file_it = m_files.find(file_path);
-
-	if (l_file_it == m_files.end())
-	{
-		l_file_it = m_current_file_it;
-		l_b_ret = mt_Set_File(file_path);
-		m_current_file_it = l_file_it;
-	}
-	else
-	{
-		l_b_ret = true;
-	}
-
-	return l_b_ret;
-}
-
-bool XMLFileLoader::mt_Work(void)
-{
-	TiXmlDocument l_document;
-
-	if (m_current_file_it != m_files.end())
-	{
-		if (l_document.LoadFile(m_current_file_it->first))
-		{
-			return mt_Explore_Document(*l_document.RootElement(), m_loading_struct, m_current_file_it->second.m_on_entry_callbacks, m_current_file_it->second.m_on_exit_callbacks);
-		}
-	}
-
-	return false;
+    return false;
 }
 
 bool XMLFileLoader::mt_Manage_Callback(const TiXmlElement& element, const std::string& path, XML_CallbackContainer& callbacks)
@@ -184,7 +143,6 @@ std::string XMLFileLoader::mt_Get_Path(const TiXmlNode* element)
 bool XMLFileLoader::mt_Recursive_Exploration(const TiXmlElement* current_element, LoadingStructure& loading_struct, XML_CallbackContainer& on_entry_callbacks, XML_CallbackContainer& on_exit_callbacks)
 {
 	bool l_b_ret;
-	const TiXmlElement* l_previous_element(current_element);
 	std::string l_path;
 
 	l_b_ret = true;
@@ -203,13 +161,13 @@ bool XMLFileLoader::mt_Recursive_Exploration(const TiXmlElement* current_element
             l_b_ret = mt_Manage_Callback(*l_Element, l_path, on_exit_callbacks);
         }
 
-        loading_struct.m_element_count++;
+        loading_struct.m_Element_Count++;
     }
 	for (std::size_t ii = 0; ii < m_Progression_Callback.size(); ii++)
     {
-        m_Progression_Callback[ii](m_current_file_it->first,
-                                   static_cast<int>(loading_struct.m_element_count),
-                                   static_cast<int>(m_current_file_it->second.m_element_count));
+        m_Progression_Callback[ii](m_File_Path,
+                                   static_cast<int>(loading_struct.m_Element_Count),
+                                   static_cast<int>(m_File_Data.m_Element_Count));
     }
 
     return l_b_ret;
