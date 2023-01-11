@@ -58,16 +58,18 @@ bool XMLFileLoader::mt_Load(const std::string& file_path)
 {
 	TiXmlDocument l_document;
 
+	m_File_Path = file_path;
+
 	if (mt_Count_File_Elements() == false)
     {
         return false;
     }
 
-    if (l_document.LoadFile(file_path))
+    if (l_document.LoadFile(m_File_Path))
     {
         return mt_Explore_Document(*l_document.RootElement(), m_Loading_Struct, m_File_Data.m_On_Entry_Callbacks, m_File_Data.m_On_Exit_Callbacks);
     }
-    std::cerr << l_document.ErrorDesc() << '\n';
+    m_Error_Description = l_document.ErrorDesc();
 
 	return false;
 }
@@ -94,12 +96,12 @@ bool XMLFileLoader::mt_Count_File_Elements(void)
 		}
 		else
         {
-            std::cerr << "No root\n";
+            m_Error_Description = "No root";
         }
 	}
 	else
     {
-        std::cerr << l_document.ErrorDesc() << '\n';
+        m_Error_Description = l_document.ErrorDesc();
     }
 
     return false;

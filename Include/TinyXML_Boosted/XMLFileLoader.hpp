@@ -116,6 +116,11 @@ public:
 	    m_Progression_Callback.clear();
 	}
 
+	const std::string& mt_Get_Error_Description(void) const
+	{
+	    return m_Error_Description;
+	}
+
 protected:
 	template<class C>
 	bool mt_Add_Callback(XML_CallbackContainer& callback_container, const std::string& xml_path, bool(C::*callback)(const XML_Element&), C* object)
@@ -148,6 +153,8 @@ protected:
 
 	std::string m_File_Path;
 	std::vector<std::function<void(const std::string&, int, int)>> m_Progression_Callback;
+
+	std::string m_Error_Description;
 };
 
 #endif // _XML_FILE_LOADER_HPP
