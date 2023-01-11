@@ -184,7 +184,9 @@ bool XMLFileLoader::mt_Explore_Document(TiXmlElement& root, LoadingStructure& lo
 {
 	bool l_ret(true);
 
-	l_ret = mt_Recursive_Exploration(&root, loading_struct, on_entry_callbacks, on_exit_callbacks);
+	l_ret = mt_Manage_Callback(root, mt_Get_Path(&root), on_entry_callbacks);
+	if (l_ret == true) l_ret = mt_Recursive_Exploration(&root, loading_struct, on_entry_callbacks, on_exit_callbacks);
+	if (l_ret == true) l_ret = mt_Manage_Callback(root, mt_Get_Path(&root), on_exit_callbacks);
 
 	return l_ret;
 }
