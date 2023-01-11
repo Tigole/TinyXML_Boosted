@@ -115,6 +115,11 @@ bool XMLFileLoader::mt_Manage_Callback(const TiXmlElement& element, const std::s
 	if (l_it != callbacks.end())
 	{
 		l_b_ret = (l_it->second)(XML_Element(element));
+
+		if (l_b_ret == false)
+        {
+            m_Error_Description = m_File_Path + ": Failed loading element at l." + std::to_string(element.Row()) + " c." + std::to_string(element.Column());
+        }
 	}
 
 	return l_b_ret;
