@@ -35,6 +35,7 @@
 			</Target>
 		</Build>
 		<Compiler>
+			<Add option="-fPIC" />
 			<Add directory="../../Include/TinyXML_Boosted" />
 		</Compiler>
 		<Unit filename="../../Include/TinyXML_Boosted/XMLFileLoader.hpp" />
