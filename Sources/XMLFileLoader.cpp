@@ -32,15 +32,17 @@ bool XML_Element::mt_Get_Attribute(const std::string& attribute_name, bool& attr
 	return m_target->QueryBoolAttribute(attribute_name.c_str(), &attribute_value) == TIXML_SUCCESS;
 }
 
-bool XML_Element::mt_Get_Text(std::string& element_value) const
+bool XML_Element::mt_Get_Text(std::string& element_value, bool maybe_empty) const
 {
     element_value = "";
+
     if (m_target->GetText() != nullptr)
     {
         element_value = m_target->GetText();
         return true;
     }
-	return false;
+
+	return maybe_empty;
 }
 
 
