@@ -1091,6 +1091,17 @@ public:
 	    SetAttribute(name.c_str(), l_ss.str());
 	}
 	#endif
+	void SetAttribute(const char* name, bool value, bool textual = false)
+	{
+	    if (textual == true)
+        {
+            SetAttribute(name, value ? "yes" : "no");
+        }
+	    else
+        {
+            SetAttribute(name, (int)value);
+        }
+	}
 
 	/** Sets an attribute of name to a given value. The attribute
 		will be created if it does not exist, or changed if it does.

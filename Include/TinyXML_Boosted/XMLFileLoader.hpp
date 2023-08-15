@@ -49,7 +49,7 @@ public:
 
 		return l_b_ret;
 	}
-	bool mt_Get_Text(std::string& element_Text) const;
+	bool mt_Get_Text(std::string& element_Text, bool maybe_empty = true) const;
 
 	template<typename T>
 	bool mt_Load_Custom_Type(std::function<bool(const TiXmlElement&, T&)> load, T& object) const
