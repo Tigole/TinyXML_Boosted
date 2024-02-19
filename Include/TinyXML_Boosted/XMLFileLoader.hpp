@@ -49,6 +49,16 @@ public:
 
 		return l_b_ret;
 	}
+	template<typename T, typename Callback>
+	bool mt_Get_Attribute(const std::string& attribute_name, T& attribute_value, Callback callback) const// bool(*callback)(const std::string& value, T& res)) const
+	{
+	    std::string l_Str;
+	    if (mt_Get_Attribute(attribute_name, l_Str) == false)
+        {
+            return false;
+        }
+	    return callback(l_Str, attribute_value);
+	}
 	bool mt_Get_Text(std::string& element_Text, bool maybe_empty = true) const;
 
 	template<typename T>
