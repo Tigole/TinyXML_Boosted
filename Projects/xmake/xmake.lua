@@ -1,7 +1,7 @@
 set_project("TinyXML_Boosted")
 set_version("1.x")
 
-target("tinyxml_boosted")
+target("tinyxml-boosted")
     set_kind("static")
 
     add_files("$(projectdir)/Sources/**.cpp")
