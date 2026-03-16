@@ -8,5 +8,5 @@
 *.layout
 
 
-Projects/xmake/build/
-Projects/xmake/.xmake/
+build/
+.xmake/
