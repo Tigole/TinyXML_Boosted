@@ -6,3 +6,7 @@
 *.depend
 
 *.layout
+
+
+Projects/xmake/build/
+Projects/xmake/.xmake/
