@@ -1,0 +1,6 @@
+[
+{
+  "directory": "c:\\Users\\sylva\\Documents\\01-Code\\00-Github\\TinyXML_Boosted",
+  "arguments": ["C:\\msys64\\mingw64\\bin\\x86_64-w64-mingw32-g++.exe", "-c", "-m64", "-Ic:\\Users\\sylva\\Documents\\01-Code\\00-Github\\TinyXML_Boosted\\Include\\TinyXML_Boosted", "-IC:\\Users\\sylva\\AppData\\Local\\.xmake\\packages\\t\\tinyxml\\2.6.2\\aaf6043295b64d6889124705e2f1eefa\\include", "-o", "build\\.objs\\tinyxml-boosted\\mingw\\x86_64\\release\\Sources\\XMLFileLoader.cpp.obj", "Sources\\XMLFileLoader.cpp"],
+  "file": "Sources\\XMLFileLoader.cpp"
+}]
