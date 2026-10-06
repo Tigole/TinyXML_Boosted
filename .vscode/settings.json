@@ -1,3 +1,5 @@
 {
-    "cmake.sourceDirectory": "C:/Users/sylva/Documents/01-Code/00-Github/TinyXML_Boosted/Projects/CMake"
+    "cmake.sourceDirectory": "${workspaceFolder}/Projects/CMake",
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "ms-vscode.cpptools",
 }
