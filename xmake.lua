@@ -9,7 +9,7 @@ target("tinyxml-boosted")
     add_files("$(projectdir)/Sources/XML_Loader.cpp")
     add_headerfiles("$(projectdir)/Include/TinyXML_Boosted/XML_Loader.hpp", {public = true})
     add_includedirs("$(projectdir)/Include/TinyXML_Boosted/", {public = true})
-    add_packages("tinyxml")
+    add_packages("tinyxml", {public = true})
 
 
 for _, testfile in ipairs(os.files("Tests/**.cpp")) do
